@@ -28,9 +28,16 @@ class LoginSerializer(serializers.Serializer):
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+    from_name=serializers.SerializerMethodField()
     class Meta:
         model = FriendRequest
         fields = '__all__'
+    
+    def get_from_name(self, obj):
+        if obj.from_user is not None:
+            return obj.from_user.username
+        else:
+            return None
 
 class UserSearchSerializer(serializers.ModelSerializer):
     class Meta:

@@ -85,6 +85,9 @@ class SendFriendRequestView(generics.CreateAPIView):
         if FriendRequest.objects.filter(from_user=from_user, to_user=to_user, status='pending').exists():
             return Response({"error": "Friend request already sent"}, status=status.HTTP_400_BAD_REQUEST)
 
+        if FriendRequest.objects.filter(from_user=from_user, to_user=to_user, status='accepted').exists():
+            return Response({"error": "Already Friend...Cannot Send Friend request"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             friend_request = FriendRequest(from_user=from_user, to_user=to_user, status='pending')
             friend_request.save()
@@ -133,3 +136,10 @@ class ListPendingRequestsView(generics.ListAPIView):
 
     def get_queryset(self):
         return FriendRequest.objects.filter(to_user=self.request.user, status='pending')
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({"message": "Friend request not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

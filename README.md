@@ -52,11 +52,18 @@ A Django Rest Framework-based social networking API with user authentication, fr
 
     docker-compose up --build
 
+
+
+
+## Postman Collection
+
+    https://elements.getpostman.com/redirect?entityId=22783304-c2acca3c-749f-410c-a11f-4e1854bd16c6&entityType=collection
+
 ## API Endpoints
 
     Signup: /social/signup/ [POST]
     Login: /social/login/ [POST]
-    Search Users: /social/search/ [GET]
+    Search Users: /social/search/ [GET] In params (key=query value="String to search")
     Send Friend Request: /social/friend-request/send/ [POST]
     Accept Friend Request: /social/friend-request/accept/{request_id}/ [POST]
     Reject Friend Request: /social/friend-request/reject/{request_id}/ [POST]
