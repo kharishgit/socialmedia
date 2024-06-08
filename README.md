@@ -27,8 +27,8 @@ A Django Rest Framework-based social networking API with user authentication, fr
 
 2. **Create and activate a virtual environment**
    
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    `python -m venv venv`
+    `source venv/bin/activate`  # On Windows use `venv\Scripts\activate`
 
 3. **Install the required packages**
 
