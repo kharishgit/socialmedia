@@ -23,7 +23,7 @@ A Django Rest Framework-based social networking API with user authentication, fr
 1. **Clone the repository:**
    
    git clone https://github.com/kharishgit/socialmedia.git
-   cd social_media
+   cd social_network
 
 2. **Create and activate a virtual environment**
    
@@ -63,7 +63,7 @@ A Django Rest Framework-based social networking API with user authentication, fr
 
     Signup: /social/signup/ [POST]
     Login: /social/login/ [POST]
-    Search Users: /social/search/ [GET] In params (key=query value="String to search")
+    Search Users: /social/search/ [GET] In params (key='query' value="String to search")
     Send Friend Request: /social/friend-request/send/ [POST]
     Accept Friend Request: /social/friend-request/accept/{request_id}/ [POST]
     Reject Friend Request: /social/friend-request/reject/{request_id}/ [POST]

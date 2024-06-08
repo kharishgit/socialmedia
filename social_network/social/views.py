@@ -3,7 +3,6 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import User
 from .serializers import UserSerializer, LoginSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
@@ -15,8 +14,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.throttling import UserRateThrottle
 from django.db.models import Q
 from django.contrib.auth import get_user_model
-import logging
-import traceback
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 
@@ -52,6 +49,21 @@ class UserSearchView(generics.ListAPIView):
             return User.objects.filter(email__iexact=query)
         else:
             return User.objects.filter(username__icontains=query)
+        
+    def list(self, request, *args, **kwargs):
+        
+        queryset = self.get_queryset()
+
+        if not queryset.exists():
+            return Response({"message": "No users found matching the query."}, status=status.HTTP_404_NOT_FOUND)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class FriendRequestThrottle(UserRateThrottle):
     rate = '3/minute'
@@ -60,7 +72,7 @@ class FriendRequestThrottle(UserRateThrottle):
 
 User = get_user_model()
 
-logger = logging.getLogger(__name__)
+
 class SendFriendRequestView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FriendRequestSerializer
@@ -129,6 +141,13 @@ class ListFriendsView(generics.ListAPIView):
             Q(sent_requests__to_user=self.request.user, sent_requests__status='accepted') |
             Q(received_requests__from_user=self.request.user, received_requests__status='accepted')
         ).distinct()
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({"message": "No friends yet."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class ListPendingRequestsView(generics.ListAPIView):
     serializer_class = FriendRequestSerializer

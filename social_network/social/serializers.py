@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        validated_data['email'] = validated_data['email'].lower()
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -21,7 +22,12 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate(self, data):
-        user = authenticate(**data)
+        
+        email = data.get('email', '').strip().lower()
+        password = data.get('password', '')
+
+       
+        user = authenticate(username=email, password=password)
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Invalid Credentials")
