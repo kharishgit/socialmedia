@@ -1,12 +1,18 @@
 from rest_framework import serializers
 from .models import User,FriendRequest
 from django.contrib.auth import authenticate,get_user_model
-
+from django.core.exceptions import ValidationError
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_email(self, value):
+        email = value.lower()
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("A user with that email already exists.")
+        return email
 
     def create(self, validated_data):
         validated_data['email'] = validated_data['email'].lower()
