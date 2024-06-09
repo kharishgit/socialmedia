@@ -22,35 +22,27 @@ A Django Rest Framework-based social networking API with user authentication, fr
 
 1. **Clone the repository:**
    
-   git clone https://github.com/kharishgit/socialmedia.git
-   cd social_network
+   `git clone https://github.com/kharishgit/socialmedia.git`
+   `cd social_network`
 
-2. **Create and activate a virtual environment**
-   
-    `python -m venv venv`
-    `source venv/bin/activate`  # On Windows use `venv\Scripts\activate`
 
-3. **Install the required packages**
+ **DOCKER SETUP - Run this application using Docker**
 
-    pip install -r requirements.txt
+2. **Build and start the containers**
 
-4. **Apply database migrations**
+    `docker-compose up`
 
-    python manage.py migrate
+3. **Database**
+    
+    The default database  sqlite(db.sqlite) is also included in the repository along with migrations.It comes with sample data inputs. The username  of admin is `admin@gmail.com` and password is `admin`
+    It also contains other users `harish@gmail.com` and password `harish` , `kumari@gmail.com` and   password `kumari` ,`haridass@gmail.com` and password `haridass` etc.
+    
+    The new users can be created using `/social/signup` The username,email and password is to be given.The email is case insensitive while username is case sensitive.
 
-5. **Create a superuser**
+    You can login with the email and password thorough this `/social/login/`
 
-    python manage.py createsuperuser
+    All the endpoints other than login and signup are Authenticated.In the postman "Authorization" section you can use "Basic Auth" type and enter the email and password for authentication
 
-6. **Run the development server**
-
-    python manage.py runserver
-
-## DOCKER SETUP - You can also run this application using Docker
-
-1. **Build and start the containers**
-
-    docker-compose up --build
 
 
 
